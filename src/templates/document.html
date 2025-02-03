@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.3, minimum-scale=0.7">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Документ {{ document_num }}</title>
+    <link rel="stylesheet" type="text/css" href="/static/style/style.css">
+</head>
+<body>
+    <header class="header">
+        <nav>
+            <ul class="header__links-list">
+                <li class="header__links-list-item current">
+                    <a href="/">Главная</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="document">
+            <h1>Текст документа: '{{ path }}'</h1>
+            <div>
+                <div class="document__card-details">
+                    {{ document|safe }}
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="/static/js/script.js"></script>
+    </body>
+</html>

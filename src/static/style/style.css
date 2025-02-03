@@ -1,0 +1,133 @@
+/*Сброс браузерных настроек, установка глобальных стилей*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+    max-width: 1200px;
+    background-color: #f4f4f4;
+    margin: 0 auto;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+li,
+
+blockquote {
+  margin: 0;
+  padding: 0;
+}
+
+
+h1 {
+    margin-bottom: 20px;
+},
+
+
+a {
+  color: inherit;
+}
+
+img {
+  width: 100%;
+}
+/*Конец глобальных стилей*/
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: #f4f4f4;
+    padding: 20px 0;
+}
+
+.header__links-list {
+    padding: 10px 10px;
+    text-align: right; /* в меню текст справа */
+    font-weight: bold; /* жирность шрифта */ 
+}
+
+.header__links-list-item {
+    display: inline;
+}
+
+.header__links-list-item a {
+    display: inline-block; /* ссылки становятся встроенными блоками */
+    color: #f4f4f4; /* цвет текста ссылок */
+    background-color: #007bff; /* их фон */
+    border-radius: 5px;
+    text-decoration: none; /* убираем подчеркивание */
+    text-align: center; /* текст по центру */
+    padding: 10px; /* внутренние отступы */
+    border: none;
+}
+
+.header__links-list-item a:hover {
+    text-decoration: underline; /* добавляем подчеркивание при наведении курсора мыши */
+}
+
+.current a {
+    display: inline-block; /* ссылки становятся встроенными блоками */
+    color: #007bff; /* цвет текста ссылок */
+    background: #f4f4f4; /* цвет фона блока current */
+    border: 1px solid #007bff;
+    border-radius: 8px;
+    text-decoration: none; /* убираем подчеркивание */
+    text-align: center; /* текст по центру */
+    padding: 10px; /* внутренние отступы */
+}
+
+.search {
+    padding: 10px;
+    margin-top: 200px;
+}
+
+.search__input {
+    width: 80%;
+    padding: 10px 10px;
+    border-radius: 4px;
+    font-size: 16px;
+    border: none;
+}
+
+.submit-button {
+    width: 19%;
+    padding: 10px 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.document__button {
+    width: 100%;
+    padding: 10px 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.document__card {
+    display: grid;
+    grid-template-columns: 100%;
+    align-items: left;
+    justify-items: left;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+}

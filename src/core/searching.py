@@ -51,5 +51,5 @@ def run_search(query: str):
     logger.info(query)
     assert isinstance(query, str), "Your query must be a string"
     raw_results = search(query)
-    prepared_results = prepare_results(raw_results)
+    prepared_results = prepare_results(query, raw_results)
     return prepared_results

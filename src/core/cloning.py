@@ -10,16 +10,15 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name
 logger = logging.getLogger(__name__)
 
 
-gitlab_host = settings.GITLAB_HOST
-gitlab_token = settings.GITLAB_TOKEN
-GROUP_ID = settings.GROUP_ID
-repositories_root_dir = settings.REPOSITORIES_ROOT_DIR
-cloning_mode = settings.CLONING_MODE
+GITLAB_HOST = settings.GITLAB_HOST
+GITLAB_TOKEN = settings.GITLAB_TOKEN
+GROUP_ID = int(settings.GROUP_ID)
+REPOSITORIES_ROOT_DIR = settings.REPOSITORIES_ROOT_DIR
 
-gl = gitlab.Gitlab(gitlab_host, private_token=gitlab_token, ssl_verify=False, api_version="4")
+gl = gitlab.Gitlab(GITLAB_HOST, private_token=GITLAB_TOKEN, ssl_verify=False, api_version="4")
 
 
-def get_subgroups_ids(gr_id):
+def get_subgroups_ids(gr_id: int):
     all_groups_ids = [gr_id]
     group = gl.groups.get(gr_id)
     subgroups = group.subgroups.list(as_list=False)
@@ -33,11 +32,13 @@ def get_subgroups_ids(gr_id):
 
 
 def update_projects_by_group(gr_id):
+    projects_info = []
     group = gl.groups.get(gr_id)
     projects = group.projects.list(as_list=False, get_all=True)
     for project in projects:
-        clone_path = os.path.join(repositories_root_dir, project.namespace["full_path"])
+        clone_path = os.path.join(REPOSITORIES_ROOT_DIR, project.namespace["full_path"])
         project_path = os.path.join(clone_path, project.path)
+        projects_info.append(f'{group.full_path};{project.path}')
 
         if os.path.exists(project_path):
             logger.info(f"Update project: '{project_path}'")
@@ -63,19 +64,22 @@ def update_projects_by_group(gr_id):
         else:
             if not os.path.exists(clone_path):
                 os.makedirs(clone_path)
-            url = f'https://oauth2:{gitlab_token}@{project.http_url_to_repo.split("https://")[1]}'
+            url = f'https://oauth2:{GITLAB_TOKEN}@{project.http_url_to_repo.split("https://")[1]}'
             logger.info(f"Cloning project: '{url}'")
             try:
                 git.Git(clone_path).clone(url)
             except git.GitCommandError:
                 logger.exception(f"Error cloning project: '{url}'")
         sleep(0.1)
+    return projects_info
 
 
 def clone_or_update_all_projects():
     all_groups_ids = get_subgroups_ids(GROUP_ID)
     for group_id in all_groups_ids:
-        update_projects_by_group(group_id)
+        projects_info = update_projects_by_group(group_id)
+        with open(os.path.join(settings.LOGS_PATH, "projects.txt"), "a", encoding="utf-8") as f:
+            f.write("\n".join(projects_info))
 
 
 if __name__ == '__main__':

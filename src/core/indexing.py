@@ -5,8 +5,7 @@ from math import ceil
 from markitdown import MarkItDown
 from whoosh.fields import Schema, TEXT, ID
 from whoosh.index import create_in, FileIndex, open_dir, EmptyIndexError
-from whoosh.writing import AsyncWriter
-from whoosh.analysis import SpaceSeparatedTokenizer, LowercaseFilter, RegexTokenizer
+from whoosh.analysis import SpaceSeparatedTokenizer, LowercaseFilter
 from multiprocessing import Pool, Lock, Manager
 import logging
 from .config import settings
@@ -164,7 +163,7 @@ def run_indexing(batch):
 
 
 def update_index():
-    get_files_to_index(settings.KNOWLEDGE_BASE_PATH, settings.LAST_INDEXED_DTTM)
+    get_files_to_index(settings.DIRECTORY_TO_INDEX, settings.LAST_INDEXED_DTTM)
     logging.info(f"Count files to index: {len(results['suitable_files'])}")
 
     _ = get_or_create_index(settings.INDEX_PATH)

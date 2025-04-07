@@ -2,12 +2,13 @@ import os
 from dotenv import load_dotenv
 
 
-env_path = '.env'
+# env_path = '.env'
+env_path = "/Users/vasiliy.samarin/projects/search_engine/.env"
 load_dotenv(dotenv_path=env_path)
 
 
 class Settings:
-    APP_TITLE = "Knowledge Base API"
+    APP_TITLE = "Search Engine"
     PROJECT_VERSION = "0.0.2"
 
     # Cloning options
@@ -20,7 +21,7 @@ class Settings:
     # Indexing options
     LAST_INDEXED_DTTM = os.getenv('LAST_INDEXED_DTTM', "")
     LOGS_PATH = os.getenv('LOGS_PATH', "")
-    KNOWLEDGE_BASE_PATH = os.getenv('KNOWLEDGE_BASE_PATH', "")
+    DIRECTORY_TO_INDEX = os.getenv('DIRECTORY_TO_INDEX', "")
     INDEX_PATH = os.getenv('INDEX_PATH', "")
     CNT_JOBS = 8  # количество потоков для индексации. Максимум зависит от процессора в вашем комьютере
     BATCH_SIZE = 300  # количество файлов в обном батче

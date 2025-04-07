@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 INDEX_PATH = settings.INDEX_PATH
 LIMIT_CNT_RESULTS = settings.LIMIT_CNT_RESULTS
+REPLACEMENT_PART = "/Users/vasiliy.samarin/Documents/gitlab_copy"
 
 
 def get_path_by_docnum(docnum: int):
@@ -30,7 +31,7 @@ def search(query: str) -> list:
     return sorted(output, key=lambda x: x['file_path'])
 
 
-def prepare_results(query: str, raw_results: list) -> list:
+def prepare_results(query: str, raw_results: list, projects: list) -> list:
     results = {query: []}
     prepared_results = []
     for result in raw_results:
@@ -40,16 +41,23 @@ def prepare_results(query: str, raw_results: list) -> list:
         results[query].append("Not found")
 
     for path in results[query]:
+        project_nm = "unknown"
         if "backup-dont-use" in path:
             continue
-        clean_path = path.replace("/Users/vasiliy.samarin/Documents/gitlab_copy", "")
-        prepared_results.append(f"{query};{clean_path}")
+        clean_path = path.replace(REPLACEMENT_PART, "")
+        for project in projects:
+            if clean_path.startswith(project):
+                project_nm = project
+                break
+        prepared_results.append(f"{query};{project_nm};{clean_path}")
     return prepared_results
 
 
 def run_search(query: str):
-    logger.info(query)
     assert isinstance(query, str), "Your query must be a string"
-    raw_results = search(query)
-    prepared_results = prepare_results(query, raw_results)
-    return prepared_results
+    if len(query) < 4:
+        return f"{query};Length of the query string must be more than 3 symbols"
+    prepared_query = query.replace(".", " ")
+    logger.info(prepared_query)
+    raw_results = search(prepared_query)
+    return raw_results

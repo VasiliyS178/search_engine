@@ -1,6 +1,4 @@
-from typing import Union
 from whoosh.index import open_dir
-from whoosh.qparser import QueryParser
 from whoosh.query import And, Term
 import logging
 from .config import settings

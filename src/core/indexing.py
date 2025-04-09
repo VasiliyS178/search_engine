@@ -174,7 +174,7 @@ def update_index():
         if batch_number + 1 < settings.START_BATCH:
             continue
         batch = sorted_files[batch_number * settings.BATCH_SIZE: (batch_number + 1) * settings.BATCH_SIZE]
-        logging.info(f"Batch {batch_number + 1} of {cnt_batches} is processing")
+        logging.info(f"Batch {batch_number + 1}/{cnt_batches} is being processed")
         processed_files = run_indexing(batch)
         indexed_files = [file for file in processed_files if file is not None]
         results["processed_files"].extend(indexed_files)

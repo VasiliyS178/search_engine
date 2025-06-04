@@ -43,7 +43,7 @@ def update_projects_by_group(gr_id):
         is_trash = False
 
         for p in TRASH_PROJECTS:
-            if p in clone_path:
+            if p in (str(clone_path) + str(project_path)):
                 is_trash = True
                 break
 

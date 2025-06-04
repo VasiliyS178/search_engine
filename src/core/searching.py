@@ -32,8 +32,11 @@ def search(query: str) -> list:
 def prepare_results(query: str, raw_results: list, projects: list) -> list:
     results = {query: []}
     prepared_results = []
-    for result in raw_results:
-        results[query].append(result["file_path"])
+    if isinstance(raw_results, str):
+        results[query].append(raw_results)
+    else:
+        for result in raw_results:
+            results[query].append(result["file_path"])
 
     if len(results[query]) == 0:
         results[query].append("Not found")

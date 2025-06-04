@@ -14,6 +14,7 @@ GITLAB_HOST = settings.GITLAB_HOST
 GITLAB_TOKEN = settings.GITLAB_TOKEN
 GROUP_ID = int(settings.GROUP_ID)
 REPOSITORIES_ROOT_DIR = settings.REPOSITORIES_ROOT_DIR
+TRASH_PROJECTS = settings.TRASH_PROJECTS
 
 gl = gitlab.Gitlab(GITLAB_HOST, private_token=GITLAB_TOKEN, ssl_verify=False, api_version="4")
 
@@ -39,6 +40,15 @@ def update_projects_by_group(gr_id):
         clone_path = os.path.join(REPOSITORIES_ROOT_DIR, project.namespace["full_path"])
         project_path = os.path.join(clone_path, project.path)
         projects_info.append(f'{group.full_path};{project.path}')
+        is_trash = False
+
+        for p in TRASH_PROJECTS:
+            if p in clone_path:
+                is_trash = True
+                break
+
+        if is_trash:
+            continue
 
         if os.path.exists(project_path):
             logger.info(f"Update project: '{project_path}'")

@@ -14,6 +14,20 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name
 logger = logging.getLogger(__name__)
 
 
+def get_files_to_search(root_path: str):
+    results = set()
+    allowed_formats = ["py"]
+    for root, dirs, files in os.walk(root_path):
+        for file in files:
+            file_name_parts = file.split(".")
+            file_name = file_name_parts[0]
+            file_ext = file_name_parts[-1]
+            abs_path = os.path.join(root, file).replace("/Users/vasiliy.samarin/projects/cvm-airflow/", "")
+            if file_ext in allowed_formats:
+                results.add(abs_path)
+    return results
+
+
 def get_files_to_parse(root_path: str, last_parsed_dttm: str = None):
     results = {
         "unknown_files": [],

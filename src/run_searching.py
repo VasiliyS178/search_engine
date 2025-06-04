@@ -1,7 +1,11 @@
 import os
+import logging
 from core.config import settings
 from core.searching import run_search, prepare_results
 
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s", datefmt=None)
+logger = logging.getLogger(__name__)
 
 QUERIES_FILE_NAME = "queries.txt"
 PROJECTS_FILE_NAME = "projects.txt"
@@ -21,7 +25,9 @@ if __name__ == '__main__':
         project = project.replace("\n", "")
         projects.append(f'/{project.replace(";", "/")}')
 
-    for query in queries:
+    for i, query in enumerate(queries):
+        if i % 10000 == 0:
+            logger.info(f"Processing {i}-th query")
         prepared_query = query.replace("\n", "")
         raw_results = run_search(prepared_query)
         prepared_results = prepare_results(prepared_query, raw_results, projects)

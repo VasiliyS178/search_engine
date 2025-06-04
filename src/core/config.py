@@ -35,7 +35,10 @@ class Settings:
     GARBAGE_FILES = ["DS_Store", "__pycache__", "__init__", "Thumbs", "gitignore", "git", ""]
 
     # Searching options
-    LIMIT_CNT_RESULTS = 100
+    LIMIT_CNT_RESULTS = 1000
+
+    # Projects and groups to skip for cloning and updating
+    TRASH_PROJECTS = ["backup-dont-use", "dcvm-arhive"]
 
 
 settings = Settings()

@@ -26,8 +26,6 @@ if __name__ == '__main__':
         projects.append(f'/{project.replace(";", "/")}')
 
     for i, query in enumerate(queries):
-        if i % 10000 == 0:
-            logger.info(f"Processing {i}-th query")
         prepared_query = query.replace("\n", "")
         raw_results = run_search(prepared_query)
         prepared_results = prepare_results(prepared_query, raw_results, projects)

@@ -32,6 +32,28 @@ def get_subgroups_ids(gr_id: int):
     return all_groups_ids
 
 
+def update_project(project_path):
+    logger.info(f"Update project: '{project_path}'")
+    repo = git.Repo(project_path)
+    try:
+        repo.git.fetch()  # Обновляем список веток
+        branches = repo.git.branch('-a')
+        target_branch = None
+        for branch in branches:
+            if 'HEAD' in branch:
+                target_branch = branch.split("/")[1]
+                break
+        if len(branches) > 0:
+            target_branch = branches[0]
+        if target_branch:
+            repo.git.checkout(target_branch)
+            repo.git.pull()
+    except:
+        logger.exception(f"Error updating project: '{project_path}'")
+    else:
+        logger.warning(f"No branches in project: '{project_path}'")
+
+
 def update_projects_by_group(gr_id):
     projects_info = []
     group = gl.groups.get(gr_id)
@@ -51,31 +73,12 @@ def update_projects_by_group(gr_id):
             continue
 
         if os.path.exists(project_path):
-            logger.info(f"Update project: '{project_path}'")
-            repo = git.Repo(project_path)
-            repo.git.fetch()  # Обновляем список веток
-            branches = repo.git.branch('-a')
-            # print(branches)
-            target_branch = None
-            for branch in branches:
-                if 'HEAD' in branch:
-                    target_branch = branch.split("/")[1]
-                    break
-            if len(branches) > 0:
-                target_branch = branches[0]
-            if target_branch:
-                try:
-                    repo.git.checkout(target_branch)
-                    repo.git.pull()
-                except:
-                    logger.exception(f"Error updating project: '{project_path}'")
-            else:
-                logger.warning(f"No branches in project: '{project_path}'")
+            pass
         else:
             if not os.path.exists(clone_path):
                 os.makedirs(clone_path)
             url = f'https://oauth2:{GITLAB_TOKEN}@{project.http_url_to_repo.split("https://")[1]}'
-            logger.info(f"Cloning project: '{url}'")
+            logger.info(f"Cloning project: '{project.http_url_to_repo}'")
             try:
                 git.Git(clone_path).clone(url)
             except git.GitCommandError:
@@ -89,7 +92,7 @@ def clone_or_update_all_projects():
     for group_id in all_groups_ids:
         projects_info = update_projects_by_group(group_id)
         with open(os.path.join(settings.LOGS_PATH, "projects.txt"), "a", encoding="utf-8") as f:
-            f.write("\n".join(projects_info))
+            f.write("\n" + "\n".join(projects_info))
 
 
 if __name__ == '__main__':

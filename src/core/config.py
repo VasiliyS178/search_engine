@@ -14,6 +14,7 @@ class Settings:
     # Cloning options
     GITLAB_HOST = os.getenv('GITLAB_HOST', "")
     GITLAB_TOKEN = os.getenv('GITLAB_TOKEN', "")
+    os.environ['GIT_SSH_COMMAND'] = 'ssh -i ~/.ssh/id_rsa'
     REPOSITORIES_ROOT_DIR = os.getenv('REPOSITORIES_ROOT_DIR', "")
     GROUP_ID = os.getenv('GROUP_ID', "")
     CLONING_MODE = "http"

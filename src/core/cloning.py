@@ -92,7 +92,7 @@ def clone_or_update_all_projects():
     for group_id in all_groups_ids:
         projects_info = update_projects_by_group(group_id)
         with open(os.path.join(settings.LOGS_PATH, "projects.txt"), "a", encoding="utf-8") as f:
-            f.write("\n" + "\n".join(projects_info))
+            f.write("\n".join(projects_info) + "\n")
 
 
 if __name__ == '__main__':
